@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
+import { CreateTradeDataDto } from './dto/create-data.dto';
 
 export class User {
   name: string;
@@ -19,8 +20,25 @@ export class AppController {
     return this.appService.tradeAlertJson(payload);
   }
 
-  @Post()
-  tradeAlertMessage() {
-    return this.appService.tradeAlertMessage();
+  // Json Format
+  @Post('trades')
+  saveTrades(@Body() tradeData: CreateTradeDataDto) {
+    return this.appService.saveTrades(tradeData);
+  }
+
+  @Get('trades')
+  getTrades() {
+    return this.appService.getTrades();
+  }
+
+  // String Format
+  @Post('_trades')
+  saveTradesString(@Body() tradeData: any) {
+    return this.appService.saveTradesString(tradeData);
+  }
+
+  @Get('_trades')
+  getTradesString() {
+    return this.appService.getTradesString();
   }
 }
