@@ -31,6 +31,9 @@ export class AppService {
 
   //JSON Format
   saveTrades(tradeData: CreateTradeDataDto) {
+    const epochTime = Date.now();
+    tradeData.createdAt = JSON.stringify(epochTime);
+    tradeData.updatedAt = JSON.stringify(epochTime);
     this.saveToDb(tradeData);
     console.log('data recieved');
     return 'Data recieved';
@@ -51,8 +54,12 @@ export class AppService {
 
   // String Format
   saveTradeAlert(tradeData: any) {
+    const epochTime = Date.now();
+
     const stringData: CreateTradeDataStringDto = {
       data: JSON.stringify(tradeData),
+      createdAt: JSON.stringify(epochTime),
+      updatedAt: JSON.stringify(epochTime),
     };
     this.saveToDbString(stringData);
     console.log('data recieved');

@@ -9,4 +9,6 @@ export class CreateTradeDataDto {
   neworders: any[];
   childorders: any[];
   rejectedorders: any[];
+  createdAt: string;
+  updatedAt: string;
 }

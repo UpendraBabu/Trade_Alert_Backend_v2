@@ -7,6 +7,12 @@ export type TradeDataStringDocument = TradeDataString & Document;
 export class TradeDataString {
   @Prop({ required: true })
   data: string;
+
+  @Prop()
+  createdAt: string;
+
+  @Prop()
+  updatedAt: string;
 }
 
 export const TradeDataStringSchema =

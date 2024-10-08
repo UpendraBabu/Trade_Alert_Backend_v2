@@ -34,6 +34,12 @@ export class TradeData {
 
   @Prop()
   rejectedorders: any[];
+
+  @Prop()
+  createdAt: string;
+
+  @Prop()
+  updatedAt: string;
 }
 
 export const TradeDataSchema = SchemaFactory.createForClass(TradeData);
