@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type TradeDataDocument = TradeData & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class TradeData {
   @Prop({ required: true })
   uid: string;

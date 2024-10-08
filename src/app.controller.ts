@@ -21,24 +21,24 @@ export class AppController {
   }
 
   // Json Format
-  @Post('trades')
+  @Post('saveTrades')
   saveTrades(@Body() tradeData: CreateTradeDataDto) {
     return this.appService.saveTrades(tradeData);
   }
 
-  @Get('trades')
+  @Get('getTrades')
   getTrades() {
     return this.appService.getTrades();
   }
 
   // String Format
-  @Post('_trades')
-  saveTradesString(@Body() tradeData: any) {
-    return this.appService.saveTradesString(tradeData);
+  @Post('saveTradeAlert')
+  saveTradeAlert(@Body() tradeData: any) {
+    return this.appService.saveTradeAlert(tradeData);
   }
 
-  @Get('_trades')
-  getTradesString() {
-    return this.appService.getTradesString();
+  @Get('getTradeAlert')
+  getTradeAlert() {
+    return this.appService.getTradeAlert();
   }
 }

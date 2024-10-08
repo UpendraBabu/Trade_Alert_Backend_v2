@@ -42,9 +42,6 @@ export class AppService {
   }
 
   async getTrades(): Promise<TradeData[]> {
-    const mongodbURL = process.env.CONNECTION_STRING;
-
-    console.log({ mongodbURL });
     const trades = await this.tradeModule.find().exec();
     if (trades.length === 0) {
       throw new NotFoundException('No Datas found');
@@ -53,7 +50,7 @@ export class AppService {
   }
 
   // String Format
-  saveTradesString(tradeData: any) {
+  saveTradeAlert(tradeData: any) {
     const stringData: CreateTradeDataStringDto = {
       data: JSON.stringify(tradeData),
     };
@@ -69,7 +66,7 @@ export class AppService {
     return await newUser.save();
   }
 
-  async getTradesString(): Promise<TradeDataString[]> {
+  async getTradeAlert(): Promise<TradeDataString[]> {
     const trades = await this.tradeStringModule.find().exec();
     if (trades.length === 0) {
       throw new NotFoundException('No Datas found');
