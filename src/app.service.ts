@@ -95,6 +95,5 @@ export class AppService {
       throw new NotFoundException('No Datas found');
     }
     return trades;
-    // return { upperLimit: upperLimit, lowerLimit: lowerLimit };
   }
 }
