@@ -5,6 +5,8 @@ export type TradeDataStringDocument = TradeDataString & Document;
 
 @Schema({ timestamps: true })
 export class TradeDataString {
+  @Prop()
+  id: number;
   @Prop({ required: true })
   data: string;
 

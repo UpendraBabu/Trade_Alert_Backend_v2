@@ -24,10 +24,10 @@ export class AppService {
     return 'CBOE Alert Test';
   }
 
-  tradeAlertJson(payload: User) {
-    console.log('Post payload: ', payload);
-    return payload;
-  }
+  // tradeAlertJson(payload: User) {
+  //   console.log('Post payload: ', payload);
+  //   return payload;
+  // }
 
   //JSON Format
   saveTrades(tradeData: CreateTradeDataDto) {
@@ -57,6 +57,7 @@ export class AppService {
     const epochTime = Date.now();
 
     const stringData: CreateTradeDataStringDto = {
+      id: tradeData.id,
       data: JSON.stringify(tradeData),
       createdAt: JSON.stringify(epochTime),
       updatedAt: JSON.stringify(epochTime),
@@ -79,5 +80,21 @@ export class AppService {
       throw new NotFoundException('No Datas found');
     }
     return trades;
+  }
+
+  async pagination(range: string) {
+    const [ll, ul] = range.split('-');
+    const limit = Number(ul) - Number(ll) + 1; // Limit the results
+    const skip = Number(ll) - 1;
+    const trades = await this.tradeStringModule
+      .find()
+      .skip(skip)
+      .limit(limit)
+      .exec();
+    if (trades.length === 0) {
+      throw new NotFoundException('No Datas found');
+    }
+    return trades;
+    // return { upperLimit: upperLimit, lowerLimit: lowerLimit };
   }
 }

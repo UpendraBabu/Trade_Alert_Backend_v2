@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateTradeDataDto } from './dto/create-data.dto';
 
@@ -15,10 +15,10 @@ export class AppController {
     return this.appService.launcher();
   }
 
-  @Post('json')
-  tradeAlertJson(@Body() payload: User) {
-    return this.appService.tradeAlertJson(payload);
-  }
+  // @Post('json')
+  // tradeAlertJson(@Body() payload: User) {
+  //   return this.appService.tradeAlertJson(payload);
+  // }
 
   // Json Format
   @Post('saveTrades')
@@ -40,5 +40,11 @@ export class AppController {
   @Get('getTradeAlert')
   getTradeAlert() {
     return this.appService.getTradeAlert();
+  }
+
+  // Pagination
+  @Get(':range')
+  getTradesByRange(@Param('range') range: string) {
+    return this.appService.pagination(range);
   }
 }
