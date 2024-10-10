@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from './app.controller';
 import { InjectModel } from '@nestjs/mongoose';
 import { TradeData } from './schema/tradeData.schema';
@@ -6,6 +10,7 @@ import { Model } from 'mongoose';
 import { CreateTradeDataDto } from './dto/create-data.dto';
 import { TradeDataString } from './schema/tradeSchema.string.dto';
 import { CreateTradeDataStringDto } from './dto/createStringData.dto';
+import { Range } from './dto/range.dto';
 
 @Injectable()
 export class AppService {
@@ -69,8 +74,6 @@ export class AppService {
 
   async saveToDbString(stringData: CreateTradeDataStringDto) {
     const newUser = new this.tradeStringModule(stringData);
-    console.log({ newUser });
-
     return await newUser.save();
   }
 
@@ -82,30 +85,53 @@ export class AppService {
     return trades;
   }
 
-  async pagination(range: string) {
-    const [ll, ul] = range.split('-');
-    const limit = Number(ul) - Number(ll) + 1;
-    const skip = Number(ll) - 1;
+  async pagination(data: Range) {
+    if (data.lowerLimit > data.upperLimit)
+      throw new BadRequestException(
+        "Lower limit can't be greater than Upper Limit",
+      );
+    if (data.startingDate > data.endingDate)
+      throw new BadRequestException(
+        "Starting date can't be later than Ending Date",
+      );
+
+    const startingDate = data.startingDate || 1727740800000;
+    const endingDate = data.endingDate || 33284649600000;
+    const ll = data.lowerLimit || 1;
+    const ul = data.upperLimit || 10;
+    const limit = ul - ll + 1;
+    var skip: number = ll - 1;
+
+    if (skip < 1) {
+      skip = null;
+    }
+
     const trades = await this.tradeStringModule
-      .find()
+      .find({
+        createdAt: {
+          $gte: startingDate,
+          $lte: endingDate,
+        },
+      })
       .skip(skip)
       .limit(limit)
       .exec();
+
     if (trades.length === 0) {
       throw new NotFoundException('No Datas found');
     }
     return trades;
   }
 
-  async fetchByDate(range: string) {
-    const [ll, ul] = range.split('-');
-    const trades = await this.tradeStringModule.find({
-      createdAt: {
-        $gte: ll,
-        $lte: ul,
-      },
-    });
+  // async fetchByDate(range: string) {
+  //   const [ll, ul] = range.split('-');
+  //   const trades = await this.tradeStringModule.find({
+  //     createdAt: {
+  //       $gte: ll,
+  //       $lte: ul,
+  //     },
+  //   });
 
-    return trades;
-  }
+  //   return trades;
+  // }
 }

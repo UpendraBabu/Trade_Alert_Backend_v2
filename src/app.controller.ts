@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateTradeDataDto } from './dto/create-data.dto';
+import { Range } from './dto/range.dto';
 
 export class User {
   name: string;
@@ -42,15 +43,20 @@ export class AppController {
     return this.appService.getTradeAlert();
   }
 
-  // Pagination
-  @Get('page/:range')
-  getTradesByRange(@Param('range') range: string) {
-    return this.appService.pagination(range);
+  @Post('range')
+  getTradesByRange(@Body() data: Range) {
+    return this.appService.pagination(data);
   }
 
   // Pagination
-  @Get('date/:date')
-  getTradesByDate(@Param('date') range: string) {
-    return this.appService.fetchByDate(range);
-  }
+  // @Get('page/:range')
+  // getTradesByPage(@Param('range') range: string) {
+  //   return this.appService.pagination(range);
+  // }
+
+  // Pagination
+  // @Get('date/:date')
+  // getTradesByDate(@Param('date') range: string) {
+  //   return this.appService.fetchByDate(range);
+  // }
 }
