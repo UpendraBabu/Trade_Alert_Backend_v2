@@ -144,6 +144,10 @@ export class AppService {
         .skip(skip)
         .limit(limit);
 
+      if (trades.length === 0) {
+        throw new NotFoundException('No Datas found');
+      }
+
       return trades;
     }
   }
@@ -162,6 +166,10 @@ export class AppService {
         $lte: endingDate,
       },
     });
+
+    if (trades.length === 0) {
+      throw new NotFoundException('No Datas found');
+    }
 
     return trades;
   }
