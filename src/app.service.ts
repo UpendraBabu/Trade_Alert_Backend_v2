@@ -84,7 +84,7 @@ export class AppService {
 
   async pagination(range: string) {
     const [ll, ul] = range.split('-');
-    const limit = Number(ul) - Number(ll) + 1; // Limit the results
+    const limit = Number(ul) - Number(ll) + 1;
     const skip = Number(ll) - 1;
     const trades = await this.tradeStringModule
       .find()
@@ -94,6 +94,18 @@ export class AppService {
     if (trades.length === 0) {
       throw new NotFoundException('No Datas found');
     }
+    return trades;
+  }
+
+  async fetchByDate(range: string) {
+    const [ll, ul] = range.split('-');
+    const trades = await this.tradeStringModule.find({
+      createdAt: {
+        $gte: ll,
+        $lte: ul,
+      },
+    });
+
     return trades;
   }
 }

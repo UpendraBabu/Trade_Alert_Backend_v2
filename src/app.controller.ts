@@ -43,8 +43,14 @@ export class AppController {
   }
 
   // Pagination
-  @Get(':range')
+  @Get('page/:range')
   getTradesByRange(@Param('range') range: string) {
     return this.appService.pagination(range);
+  }
+
+  // Pagination
+  @Get('date/:date')
+  getTradesByDate(@Param('date') range: string) {
+    return this.appService.fetchByDate(range);
   }
 }
