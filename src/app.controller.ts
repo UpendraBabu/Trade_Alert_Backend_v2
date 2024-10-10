@@ -43,20 +43,22 @@ export class AppController {
     return this.appService.getTradeAlert();
   }
 
-  @Post('range')
+  // Pagination
+  @Post('getTradeAlert/v2')
   getTradesByRange(@Body() data: Range) {
     return this.appService.pagination(data);
   }
 
-  // Pagination
-  // @Get('page/:range')
-  // getTradesByPage(@Param('range') range: string) {
-  //   return this.appService.pagination(range);
-  // }
+  @Get('range/:ll/:ul')
+  getTradesByPage(@Param('ll') ll: string, @Param('ul') ul: string) {
+    return this.appService.fetchByRange(ll, ul);
+  }
 
-  // Pagination
-  // @Get('date/:date')
-  // getTradesByDate(@Param('date') range: string) {
-  //   return this.appService.fetchByDate(range);
-  // }
+  @Get('date/:start/:end')
+  getTradesByDate(
+    @Param('start') staringDate: string,
+    @Param('end') endingDate: string,
+  ) {
+    return this.appService.fetchByDate(staringDate, endingDate);
+  }
 }

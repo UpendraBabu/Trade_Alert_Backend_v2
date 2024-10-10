@@ -123,15 +123,46 @@ export class AppService {
     return trades;
   }
 
-  // async fetchByDate(range: string) {
-  //   const [ll, ul] = range.split('-');
-  //   const trades = await this.tradeStringModule.find({
-  //     createdAt: {
-  //       $gte: ll,
-  //       $lte: ul,
-  //     },
-  //   });
+  async fetchByRange(ll: string, ul: string) {
+    const lowerLimit = parseInt(ll);
+    const upperLimit = parseInt(ul);
 
-  //   return trades;
-  // }
+    if (lowerLimit > upperLimit) {
+      throw new BadRequestException(
+        "Lower limit can't be greater than Upper Limit",
+      );
+    } else {
+      const limit = upperLimit - lowerLimit + 1;
+      var skip = lowerLimit - 1;
+
+      if (skip < 1) {
+        skip = null;
+      }
+
+      const trades = await this.tradeStringModule
+        .find()
+        .skip(skip)
+        .limit(limit);
+
+      return trades;
+    }
+  }
+
+  async fetchByDate(start: string, end: string) {
+    const startingDate = parseInt(start);
+    const endingDate = parseInt(end);
+    if (startingDate > endingDate)
+      throw new BadRequestException(
+        "Starting date can't be later than Ending Date",
+      );
+
+    const trades = await this.tradeStringModule.find({
+      createdAt: {
+        $gte: startingDate,
+        $lte: endingDate,
+      },
+    });
+
+    return trades;
+  }
 }
