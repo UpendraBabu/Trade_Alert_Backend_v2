@@ -12,6 +12,7 @@ import { TradeDataString } from './schema/tradeSchema.string.dto';
 import { CreateTradeDataStringDto } from './dto/createStringData.dto';
 import { Range } from './dto/range.dto';
 import { Counter } from './schema/counter.schema';
+import { ReturnData } from './Utils/globalData';
 
 @Injectable()
 export class AppService {
@@ -42,12 +43,15 @@ export class AppService {
 
   //JSON Format
   saveTrades(tradeData: CreateTradeDataDto) {
+    const returnData = new ReturnData();
     const epochTime = Date.now();
     tradeData.createdAt = JSON.stringify(epochTime);
     tradeData.updatedAt = JSON.stringify(epochTime);
     this.saveToDb(tradeData);
     console.log('data recieved');
-    return 'Data recieved';
+    returnData.error = null;
+    returnData.message = 'Data recieved';
+    return returnData;
   }
 
   async getId(dbName: string) {
@@ -68,16 +72,21 @@ export class AppService {
     return await newUser.save();
   }
 
-  async getTrades(): Promise<TradeData[]> {
+  async getTrades(): Promise<ReturnData> {
+    const returnData = new ReturnData();
     const trades = await this.tradeModule.find().exec();
     if (trades.length === 0) {
       throw new NotFoundException('No Datas found');
     }
-    return trades;
+    returnData.error = null;
+    returnData.message = 'All Data fetched';
+    returnData.value = trades;
+    return returnData;
   }
 
   // String Format
   saveTradeAlert(tradeData: any) {
+    const returnData = new ReturnData();
     const epochTime = Date.now();
 
     const stringData: CreateTradeDataStringDto = {
@@ -87,8 +96,9 @@ export class AppService {
       updatedAt: JSON.stringify(epochTime),
     };
     this.saveToDbString(stringData);
-    console.log('data recieved');
-    return 'Data recieved';
+    returnData.error = null;
+    returnData.message = 'Data recieved';
+    return returnData;
   }
 
   async saveToDbString(stringData: CreateTradeDataStringDto) {
@@ -98,15 +108,20 @@ export class AppService {
     return await newUser.save();
   }
 
-  async getTradeAlert(): Promise<TradeDataString[]> {
+  async getTradeAlert(): Promise<ReturnData> {
+    const returnData = new ReturnData();
     const trades = await this.tradeStringModule.find().exec();
     if (trades.length === 0) {
       throw new NotFoundException('No Datas found');
     }
-    return trades;
+    returnData.error = null;
+    returnData.message = 'All Data fetched';
+    returnData.value = trades;
+    return returnData;
   }
 
   async pagination(data: Range) {
+    const returnData = new ReturnData();
     if (data.lowerLimit > data.upperLimit)
       throw new BadRequestException(
         "Lower limit can't be greater than Upper Limit",
@@ -141,10 +156,14 @@ export class AppService {
     if (trades.length === 0) {
       throw new NotFoundException('No Datas found');
     }
-    return trades;
+    returnData.error = null;
+    returnData.message = 'Filtered Datas as per the provided Filter';
+    returnData.value = trades;
+    return returnData;
   }
 
   async fetchByRange(ll: string, ul: string) {
+    const returnData = new ReturnData();
     const lowerLimit = parseInt(ll);
     const upperLimit = parseInt(ul);
 
@@ -169,11 +188,14 @@ export class AppService {
         throw new NotFoundException('No Datas found');
       }
 
-      return trades;
+      returnData.error = null;
+      returnData.message = 'Filtered Datas as per the provided Range';
+      returnData.value = trades;
     }
   }
 
   async fetchByDate(start: string, end: string) {
+    const returnData = new ReturnData();
     const startingDate = parseInt(start);
     const endingDate = parseInt(end);
     if (startingDate > endingDate)
@@ -192,6 +214,8 @@ export class AppService {
       throw new NotFoundException('No Datas found');
     }
 
-    return trades;
+    returnData.error = null;
+    returnData.message = 'Filtered Datas as per the provided Date range';
+    returnData.value = trades;
   }
 }
