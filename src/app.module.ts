@@ -8,6 +8,7 @@ import {
   TradeDataStringSchema,
 } from './schema/tradeSchema.string.dto';
 import { ConfigModule } from '@nestjs/config';
+import { Counter, CounterSchema } from './schema/counter.schema';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ConfigModule } from '@nestjs/config';
     MongooseModule.forFeature([
       { name: TradeData.name, schema: TradeDataSchema },
       { name: TradeDataString.name, schema: TradeDataStringSchema },
+      { name: Counter.name, schema: CounterSchema },
     ]),
   ],
   controllers: [AppController],

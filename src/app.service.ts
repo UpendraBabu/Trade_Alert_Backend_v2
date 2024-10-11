@@ -11,13 +11,19 @@ import { CreateTradeDataDto } from './dto/create-data.dto';
 import { TradeDataString } from './schema/tradeSchema.string.dto';
 import { CreateTradeDataStringDto } from './dto/createStringData.dto';
 import { Range } from './dto/range.dto';
+import { Counter } from './schema/counter.schema';
 
 @Injectable()
 export class AppService {
   constructor(
-    @InjectModel(TradeData.name) private tradeModule: Model<TradeData>,
+    @InjectModel(TradeData.name)
+    private tradeModule: Model<TradeData>,
+
     @InjectModel(TradeDataString.name)
     private tradeStringModule: Model<TradeDataString>,
+
+    @InjectModel(Counter.name)
+    private counter: Model<Counter>,
   ) {}
 
   getHello(): string {
@@ -44,6 +50,19 @@ export class AppService {
     return 'Data recieved';
   }
 
+  async getId(dbName: string) {
+    const data = await this.counter.findOne({ db: dbName });
+    if (data) {
+      const id = data.id + 1;
+      await this.counter.updateOne({ db: dbName }, { id });
+      return id;
+    } else {
+      const id = 1;
+      await this.counter.insertMany({ db: dbName, id });
+      return id;
+    }
+  }
+
   async saveToDb(tradeData: CreateTradeDataDto) {
     const newUser = new this.tradeModule(tradeData);
     return await newUser.save();
@@ -62,7 +81,7 @@ export class AppService {
     const epochTime = Date.now();
 
     const stringData: CreateTradeDataStringDto = {
-      id: tradeData.id,
+      id: null,
       data: JSON.stringify(tradeData),
       createdAt: JSON.stringify(epochTime),
       updatedAt: JSON.stringify(epochTime),
@@ -73,6 +92,8 @@ export class AppService {
   }
 
   async saveToDbString(stringData: CreateTradeDataStringDto) {
+    const uniqueId = await this.getId('tradeId');
+    stringData.id = uniqueId;
     const newUser = new this.tradeStringModule(stringData);
     return await newUser.save();
   }
