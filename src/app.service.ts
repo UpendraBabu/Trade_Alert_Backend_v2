@@ -95,6 +95,8 @@ export class AppService {
       createdAt: JSON.stringify(epochTime),
       updatedAt: JSON.stringify(epochTime),
     };
+    console.log('Data recieved');
+
     this.saveToDbString(stringData);
     returnData.error = null;
     returnData.message = 'Data recieved';
@@ -108,19 +110,23 @@ export class AppService {
     return await newUser.save();
   }
 
-  async getTradeAlert(): Promise<ReturnData> {
+  async getTradeAlert() {
     const returnData = new ReturnData();
-    const trades = await this.tradeStringModule.find().exec();
-    if (trades.length === 0) {
+    const count = await this.tradeStringModule.countDocuments();
+    if (count === 0) {
       throw new NotFoundException('No Datas found');
     }
+    const trades = await this.tradeStringModule.find().exec();
+
     returnData.error = null;
     returnData.message = 'All Data fetched';
-    returnData.value = trades;
+    returnData.value = { totalCount: count, data: trades };
     return returnData;
   }
 
   async pagination(data: Range) {
+    console.log({ data });
+
     const returnData = new ReturnData();
     if (data.lowerLimit > data.upperLimit)
       throw new BadRequestException(
@@ -131,6 +137,10 @@ export class AppService {
         "Starting date can't be later than Ending Date",
       );
 
+    const count = await this.tradeStringModule.countDocuments();
+    if (count === 0) {
+      throw new NotFoundException('No Datas found');
+    }
     const startingDate = data.startingDate || 1727740800000;
     const endingDate = data.endingDate || 33284649600000;
     const ll = data.lowerLimit || 1;
@@ -158,7 +168,7 @@ export class AppService {
     }
     returnData.error = null;
     returnData.message = 'Filtered Datas as per the provided Filter';
-    returnData.value = trades;
+    returnData.value = { totalCount: count, data: trades };
     return returnData;
   }
 
