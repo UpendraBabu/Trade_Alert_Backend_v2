@@ -61,4 +61,9 @@ export class AppController {
   ) {
     return this.appService.fetchByDate(staringDate, endingDate);
   }
+
+  @Get('epoch/:time')
+  getTime(@Param() time: any) {
+    return this.appService.getTime(time);
+  }
 }
