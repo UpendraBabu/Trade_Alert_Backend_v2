@@ -18,12 +18,12 @@ import { Trade } from './trades/entities/trade.entity';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot(process.env.CONNECTION_STRING),
-    MongooseModule.forFeature([
-      { name: TradeData.name, schema: TradeDataSchema },
-      { name: TradeDataString.name, schema: TradeDataStringSchema },
-      { name: Counter.name, schema: CounterSchema },
-    ]),
+    // MongooseModule.forRoot(process.env.CONNECTION_STRING),
+    // MongooseModule.forFeature([
+    //   { name: TradeData.name, schema: TradeDataSchema },
+    //   { name: TradeDataString.name, schema: TradeDataStringSchema },
+    //   { name: Counter.name, schema: CounterSchema },
+    // ]),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'dpg-cs5ljndumphs73avc4eg-a.oregon-postgres.render.com',
