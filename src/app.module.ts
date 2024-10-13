@@ -13,25 +13,28 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TradesModule } from './trades/trades.module';
 import { Trade } from './trades/entities/trade.entity';
 
+// const type = process.env.DB_TYPE;
+// const url = process.env.DB_URL;
+// const port = process.env.DB_PORT;
+// const username = process.env.DB_USERNAME;
+// const password = process.env.DB_PASSWORD;
+// const database = process.env.DB_DATABASE;
+
+// console.log(type, url, port, username, password, database);
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    // MongooseModule.forRoot(process.env.CONNECTION_STRING),
-    // MongooseModule.forFeature([
-    //   { name: TradeData.name, schema: TradeDataSchema },
-    //   { name: TradeDataString.name, schema: TradeDataStringSchema },
-    //   { name: Counter.name, schema: CounterSchema },
-    // ]),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'dpg-cs5ljndumphs73avc4eg-a.oregon-postgres.render.com',
-      port: 5432,
-      password: 'RDAKoDocuszwNzZ5hbe79nXRV1nPQEaK',
-      username: 'super_user',
+      host: process.env.DB_URL,
+      port: parseInt(process.env.DB_PORT),
+      database: process.env.DB_DATABASE,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
       entities: [Trade],
-      database: 'trade_alert',
       synchronize: true,
       logging: false,
       ssl: {
@@ -39,6 +42,7 @@ import { Trade } from './trades/entities/trade.entity';
       },
     }),
     TradesModule,
+    TypeOrmModule.forFeature([Trade]),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -8,5 +8,6 @@ import { Trade } from './entities/trade.entity';
   imports: [TypeOrmModule.forFeature([Trade])],
   controllers: [TradesController],
   providers: [TradesService],
+  exports: [TradesService],
 })
 export class TradesModule {}

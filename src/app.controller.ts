@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateTradeDataDto } from './dto/create-data.dto';
-import { Range } from './dto/range.dto';
+import { TradesService } from './trades/trades.service';
+import { CreateTradeDto } from './trades/dto/create-trade.dto';
+import { Range } from './trades/dto/range.dto';
 
 export class User {
   name: string;
@@ -9,7 +11,11 @@ export class User {
 
 @Controller()
 export class AppController {
-  // constructor(private readonly appService: AppService) {}
+  constructor(
+    @Inject(TradesService)
+    private readonly tradesService: TradesService,
+    private readonly appService: AppService,
+  ) {}
   // @Get()
   // launcher(): string {
   //   return this.appService.launcher();
@@ -56,4 +62,14 @@ export class AppController {
   // getTime(@Param() time: any) {
   //   return this.appService.getTime(time);
   // }
+
+  @Post('saveTradeAlert')
+  saveTradeAlert(@Body() createTradeDto: CreateTradeDto) {
+    return this.tradesService.createV2(createTradeDto);
+  }
+
+  @Post('fetchTradeAlert')
+  fetchTradeAlert(@Body() data: Range) {
+    return this.tradesService.pagination(data);
+  }
 }

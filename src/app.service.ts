@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -10,20 +11,29 @@ import { Model } from 'mongoose';
 import { CreateTradeDataDto } from './dto/create-data.dto';
 import { TradeDataString } from './schema/tradeSchema.string.dto';
 import { CreateTradeDataStringDto } from './dto/createStringData.dto';
-import { Range } from './dto/range.dto';
 import { Counter } from './schema/counter.schema';
 import { ReturnData } from './Utils/globalData';
+import { TradesService } from './trades/trades.service';
+import { Range } from './trades/dto/range.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Trade } from './trades/entities/trade.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AppService {
-  // constructor(
-  //   @InjectModel(TradeData.name)
-  //   private tradeModule: Model<TradeData>,
-  //   @InjectModel(TradeDataString.name)
-  //   private tradeStringModule: Model<TradeDataString>,
-  //   @InjectModel(Counter.name)
-  //   private counter: Model<Counter>,
-  // ) {}
+  constructor(
+    @InjectRepository(Trade)
+    @Inject(TradesService)
+    private readonly tradesRepository: Repository<Trade>,
+    private readonly tradesService: TradesService,
+  ) {
+    // @InjectModel(TradeData.name)
+    // private tradeModule: Model<TradeData>,
+    // @InjectModel(TradeDataString.name)
+    // private tradeStringModule: Model<TradeDataString>,
+    // @InjectModel(Counter.name)
+    // private counter: Model<Counter>,
+  }
   // getHello(): string {
   //   return 'Hello World!';
   // }
