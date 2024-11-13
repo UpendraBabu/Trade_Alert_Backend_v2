@@ -1,14 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { TradeData, TradeDataSchema } from './schema/tradeData.schema';
-import {
-  TradeDataString,
-  TradeDataStringSchema,
-} from './schema/tradeSchema.string.dto';
+
 import { ConfigModule } from '@nestjs/config';
-import { Counter, CounterSchema } from './schema/counter.schema';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TradesModule } from './trades/trades.module';
 import { Trade } from './trades/entities/trade.entity';

@@ -4,15 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { User } from './app.controller';
-import { InjectModel } from '@nestjs/mongoose';
-import { TradeData } from './schema/tradeData.schema';
-import { Model } from 'mongoose';
-import { CreateTradeDataDto } from './dto/create-data.dto';
-import { TradeDataString } from './schema/tradeSchema.string.dto';
-import { CreateTradeDataStringDto } from './dto/createStringData.dto';
-import { Counter } from './schema/counter.schema';
-import { ReturnData } from './Utils/globalData';
+
 import { TradesService } from './trades/trades.service';
 import { Range } from './trades/dto/range.dto';
 import { InjectRepository } from '@nestjs/typeorm';
