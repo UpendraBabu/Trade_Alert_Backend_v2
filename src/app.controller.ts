@@ -72,4 +72,6 @@ export class AppController {
   fetchTradeAlert(@Body() data: Range) {
     return this.tradesService.pagination(data);
   }
+
+  // Add new methods
 }
